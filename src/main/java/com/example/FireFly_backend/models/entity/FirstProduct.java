@@ -1,7 +1,10 @@
 package com.example.FireFly_backend.models.entity;
 
+import com.example.FireFly_backend.enums.MaterialType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -36,6 +39,8 @@ public class FirstProduct {
     private String description;
     private double price;
     private int quantity;
+    @Enumerated(EnumType.STRING)
+    private MaterialType materialType;
 
     public String getBase64Image() {
         return Base64.getEncoder().encodeToString(this.image);
