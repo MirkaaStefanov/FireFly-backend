@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.util.Base64;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -32,9 +33,8 @@ public class MidProductService {
 
     public MidProductDTO save(MidProductDTO productDTO) throws IOException {
         MidProduct product = modelMapper.map(productDTO, MidProduct.class);
-        if (productDTO.getMultipartFile() != null && !productDTO.getMultipartFile().isEmpty()) {
-            product.setImage(productDTO.getMultipartFile().getBytes());
-        }
+        byte[] decodedImage = Base64.getDecoder().decode(productDTO.getImage());
+        product.setImage(decodedImage);
         MidProduct savedProduct = midProductRepository.save(product);
         return modelMapper.map(savedProduct, MidProductDTO.class);
     }

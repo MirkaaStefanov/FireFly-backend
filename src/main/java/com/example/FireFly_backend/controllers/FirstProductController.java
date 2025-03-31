@@ -3,6 +3,7 @@ package com.example.FireFly_backend.controllers;
 import com.example.FireFly_backend.models.dto.FirstProductDTO;
 import com.example.FireFly_backend.services.impl.FirstProductService;
 import lombok.AllArgsConstructor;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;

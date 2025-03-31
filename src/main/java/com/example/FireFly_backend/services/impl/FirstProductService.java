@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
+import java.util.Base64;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -31,9 +32,8 @@ public class FirstProductService {
 
     public FirstProductDTO save(FirstProductDTO productDTO) throws IOException {
         FirstProduct product = modelMapper.map(productDTO, FirstProduct.class);
-        if (productDTO.getMultipartFile() != null && !productDTO.getMultipartFile().isEmpty()) {
-            product.setImage(productDTO.getMultipartFile().getBytes());
-        }
+        byte[] decodedImage = Base64.getDecoder().decode(productDTO.getImage());
+        product.setImage(decodedImage);
         FirstProduct savedProduct = firstProductRepository.save(product);
         return modelMapper.map(savedProduct, FirstProductDTO.class);
     }
