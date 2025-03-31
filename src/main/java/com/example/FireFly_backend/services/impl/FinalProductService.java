@@ -12,6 +12,8 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class FinalProductService {
@@ -20,7 +22,7 @@ public class FinalProductService {
     private final ModelMapper modelMapper;
 
     @Autowired
-    public FinalProductService(FinalProductRepository finalProductRepository,  @Qualifier("productModelMapper") ModelMapper modelMapper) {
+    public FinalProductService(FinalProductRepository finalProductRepository, @Qualifier("productModelMapper") ModelMapper modelMapper) {
         this.finalProductRepository = finalProductRepository;
         this.modelMapper = modelMapper;
     }
@@ -33,6 +35,13 @@ public class FinalProductService {
         }
         FinalProduct savedProduct = finalProductRepository.save(product);
         return modelMapper.map(savedProduct, FinalProductDTO.class);
+    }
+
+    public List<FinalProductDTO> findAll() {
+        List<FinalProduct> products = finalProductRepository.findAll();
+        return products.stream()
+                .map(product -> modelMapper.map(product, FinalProductDTO.class))
+                .collect(Collectors.toList());
     }
 
 }

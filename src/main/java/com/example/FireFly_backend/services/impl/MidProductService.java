@@ -14,6 +14,8 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class MidProductService {
@@ -23,7 +25,7 @@ public class MidProductService {
 
     @Autowired
     public MidProductService(MidProductRepository midProductRepository,
-                               @Qualifier("productModelMapper") ModelMapper modelMapper) {
+                             @Qualifier("productModelMapper") ModelMapper modelMapper) {
         this.midProductRepository = midProductRepository;
         this.modelMapper = modelMapper;
     }
@@ -37,5 +39,11 @@ public class MidProductService {
         return modelMapper.map(savedProduct, MidProductDTO.class);
     }
 
+    public List<MidProductDTO> findAll() {
+        List<MidProduct> products = midProductRepository.findAll();
+        return products.stream()
+                .map(product -> modelMapper.map(product, MidProductDTO.class))
+                .collect(Collectors.toList());
+    }
 
 }

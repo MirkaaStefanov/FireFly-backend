@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.io.IOException;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/finalProduct")
@@ -23,5 +24,10 @@ public class FinalProductController {
     @PostMapping("/save")
     public ResponseEntity<FinalProductDTO> save(@RequestBody FinalProductDTO productDTO) throws IOException {
         return ResponseEntity.ok(finalProductService.save(productDTO));
+    }
+
+    @GetMapping("/all")
+    public ResponseEntity<List<FinalProductDTO>> findAll() {
+        return ResponseEntity.ok(finalProductService.findAll());
     }
 }
