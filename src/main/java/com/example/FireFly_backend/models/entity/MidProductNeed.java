@@ -23,7 +23,7 @@ import lombok.ToString;
 @AllArgsConstructor
 @Builder
 @Entity
-@Table(name = "final_product_need")
+@Table(name = "mid_product_need")
 public class MidProductNeed {
 
     @Id
