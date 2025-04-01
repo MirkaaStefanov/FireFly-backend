@@ -17,16 +17,13 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@AllArgsConstructor
 public class FinalProductService {
 
     private final FinalProductRepository finalProductRepository;
     private final ModelMapper modelMapper;
 
-    @Autowired
-    public FinalProductService(FinalProductRepository finalProductRepository, @Qualifier("productModelMapper") ModelMapper modelMapper) {
-        this.finalProductRepository = finalProductRepository;
-        this.modelMapper = modelMapper;
-    }
+
 
     public FinalProductDTO save(FinalProductDTO productDTO) throws IOException {
         FinalProduct product = modelMapper.map(productDTO, FinalProduct.class);

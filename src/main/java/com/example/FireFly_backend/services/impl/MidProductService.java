@@ -19,17 +19,12 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@AllArgsConstructor
 public class MidProductService {
 
     private final MidProductRepository midProductRepository;
     private final ModelMapper modelMapper;
 
-    @Autowired
-    public MidProductService(MidProductRepository midProductRepository,
-                             @Qualifier("productModelMapper") ModelMapper modelMapper) {
-        this.midProductRepository = midProductRepository;
-        this.modelMapper = modelMapper;
-    }
 
     public MidProductDTO save(MidProductDTO productDTO) throws IOException {
         MidProduct product = modelMapper.map(productDTO, MidProduct.class);
