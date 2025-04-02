@@ -43,6 +43,11 @@ public class SecurityConfiguration {
                 })
                 .sessionManagement(c -> c.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests((authorize) -> authorize
+                        .requestMatchers("/api/v1/finalProduct/**").hasRole("ADMIN")
+                        .requestMatchers("/api/v1/midProduct/**").hasRole("ADMIN")
+                        .requestMatchers("/api/v1/firstProduct/**").hasRole("ADMIN")
+                        .requestMatchers("/api/v1/finalProductNeed/**").hasRole("ADMIN")
+                        .requestMatchers("/api/v1/midProductNeed/**").hasRole("ADMIN")
                         .anyRequest().permitAll()
                 )
                 .authenticationProvider(authenticationProvider)
