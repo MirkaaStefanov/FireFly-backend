@@ -34,4 +34,10 @@ public class FinalProductNeedController {
     public ResponseEntity<List<FinalProductNeedDTO>> findAllForFinalProduct(@PathVariable Long id,@RequestHeader("Authorization") String auth) throws ChangeSetPersister.NotFoundException {
         return ResponseEntity.ok(finalProductNeedService.findNeedsForProduct(id));
     }
+
+    @GetMapping("/cost/{id}")
+    public ResponseEntity<Double> calculateCost(@PathVariable Long id, @RequestHeader("Authorization") String auth) throws ChangeSetPersister.NotFoundException {
+        return ResponseEntity.ok(finalProductNeedService.calculateCost(id));
+    }
+
 }
