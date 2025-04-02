@@ -9,6 +9,7 @@ import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -24,10 +25,8 @@ public class FinalProductService {
     private final ModelMapper modelMapper;
 
 
-
     public FinalProductDTO save(FinalProductDTO productDTO) throws IOException {
         FinalProduct product = modelMapper.map(productDTO, FinalProduct.class);
-
         byte[] decodedImage = Base64.getDecoder().decode(productDTO.getImage());
         product.setImage(decodedImage);
         FinalProduct savedProduct = finalProductRepository.save(product);
@@ -39,6 +38,11 @@ public class FinalProductService {
         return products.stream()
                 .map(product -> modelMapper.map(product, FinalProductDTO.class))
                 .collect(Collectors.toList());
+    }
+
+    public FinalProductDTO findById(Long id) throws ChangeSetPersister.NotFoundException {
+        FinalProduct finalProduct = finalProductRepository.findById(id).orElseThrow(ChangeSetPersister.NotFoundException::new);
+        return modelMapper.map(finalProduct, FinalProductDTO.class);
     }
 
 }

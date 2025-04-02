@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -39,4 +40,10 @@ public class FirstProductService {
                 .map(product -> modelMapper.map(product, FirstProductDTO.class))
                 .collect(Collectors.toList());
     }
+
+    public FirstProductDTO findById(Long id) throws ChangeSetPersister.NotFoundException {
+        FirstProduct firstProduct = firstProductRepository.findById(id).orElseThrow(ChangeSetPersister.NotFoundException::new);
+        return modelMapper.map(firstProduct, FirstProductDTO.class);
+    }
+
 }

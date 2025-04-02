@@ -1,13 +1,16 @@
 package com.example.FireFly_backend.controllers;
 
+import com.example.FireFly_backend.models.dto.FirstProductDTO;
 import com.example.FireFly_backend.models.dto.MidProductDTO;
 import com.example.FireFly_backend.services.impl.MidProductService;
 import lombok.AllArgsConstructor;
+import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.io.IOException;
@@ -28,4 +31,8 @@ public class MidProductController {
         return ResponseEntity.ok(midProductService.findAll());
     }
 
+    @GetMapping("/findById/{id}")
+    public ResponseEntity<MidProductDTO> findById(@RequestParam Long id) throws ChangeSetPersister.NotFoundException {
+        return ResponseEntity.ok(midProductService.findById(id));
+    }
 }

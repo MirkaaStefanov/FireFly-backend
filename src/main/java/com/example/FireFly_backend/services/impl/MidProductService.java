@@ -11,6 +11,7 @@ import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -41,4 +42,8 @@ public class MidProductService {
                 .collect(Collectors.toList());
     }
 
+    public MidProductDTO findById(Long id) throws ChangeSetPersister.NotFoundException {
+        MidProduct midProduct = midProductRepository.findById(id).orElseThrow(ChangeSetPersister.NotFoundException::new);
+        return modelMapper.map(midProduct, MidProductDTO.class);
+    }
 }
