@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -23,17 +24,17 @@ public class FirstProductController {
     private final FirstProductService firstProductService;
 
     @PostMapping("/save")
-    public ResponseEntity<FirstProductDTO> save(@RequestBody FirstProductDTO productDTO) throws IOException {
+    public ResponseEntity<FirstProductDTO> save(@RequestBody FirstProductDTO productDTO,@RequestHeader("Authorization") String auth) throws IOException {
         return ResponseEntity.ok(firstProductService.save(productDTO));
     }
 
     @GetMapping("/all")
-    public ResponseEntity<List<FirstProductDTO>> findAll() {
+    public ResponseEntity<List<FirstProductDTO>> findAll(@RequestHeader("Authorization") String auth) {
         return ResponseEntity.ok(firstProductService.findAll());
     }
 
     @GetMapping("/findById/{id}")
-    public ResponseEntity<FirstProductDTO> findById(@RequestParam Long id) throws ChangeSetPersister.NotFoundException {
+    public ResponseEntity<FirstProductDTO> findById(@RequestParam Long id,@RequestHeader("Authorization") String auth) throws ChangeSetPersister.NotFoundException {
         return ResponseEntity.ok(firstProductService.findById(id));
     }
 

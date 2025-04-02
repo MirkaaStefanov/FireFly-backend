@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -25,12 +26,12 @@ public class FinalProductNeedController {
     private final FinalProductNeedService finalProductNeedService;
 
     @PostMapping("/save")
-    public ResponseEntity<FinalProductNeedDTO> save(@RequestParam Long finalProductId, @RequestParam Long midProductId, @RequestParam int quantity) throws IOException, ChangeSetPersister.NotFoundException {
+    public ResponseEntity<FinalProductNeedDTO> save(@RequestParam Long finalProductId, @RequestParam Long midProductId, @RequestParam int quantity,@RequestHeader("Authorization") String auth) throws IOException, ChangeSetPersister.NotFoundException {
         return ResponseEntity.ok(finalProductNeedService.save(finalProductId, midProductId, quantity));
     }
 
     @GetMapping("/all/{id}")
-    public ResponseEntity<List<FinalProductNeedDTO>> findAllForFinalProduct(@PathVariable Long id) throws ChangeSetPersister.NotFoundException {
+    public ResponseEntity<List<FinalProductNeedDTO>> findAllForFinalProduct(@PathVariable Long id,@RequestHeader("Authorization") String auth) throws ChangeSetPersister.NotFoundException {
         return ResponseEntity.ok(finalProductNeedService.findNeedsForProduct(id));
     }
 }

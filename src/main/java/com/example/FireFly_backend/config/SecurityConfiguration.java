@@ -1,11 +1,14 @@
 package com.example.FireFly_backend.config;
 
+import com.example.FireFly_backend.enums.Role;
 import com.example.FireFly_backend.filters.JwtAuthenticationFilter;
 import com.example.FireFly_backend.handlers.JwtAuthenticationEntryPoint;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
+import org.json.HTTP;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
@@ -17,6 +20,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.logout.LogoutHandler;
+
+import static com.example.FireFly_backend.enums.Role.ADMIN;
 
 /**
  * Configuration class for setting up security configurations, including authentication,
@@ -43,7 +48,7 @@ public class SecurityConfiguration {
                 })
                 .sessionManagement(c -> c.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests((authorize) -> authorize
-                        .requestMatchers("/api/v1/finalProduct/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/api/v1/finalProduct/all").hasRole("ADMIN")
                         .requestMatchers("/api/v1/midProduct/**").hasRole("ADMIN")
                         .requestMatchers("/api/v1/firstProduct/**").hasRole("ADMIN")
                         .requestMatchers("/api/v1/finalProductNeed/**").hasRole("ADMIN")
