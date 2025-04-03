@@ -18,6 +18,7 @@ public class FinalProductDTO {
     private String description;
     private double price;
     private int quantity;
+    private double finalCost;
     @JsonIgnore
     private MultipartFile multipartFile;
 
