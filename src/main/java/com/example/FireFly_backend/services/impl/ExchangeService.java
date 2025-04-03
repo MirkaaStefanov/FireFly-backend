@@ -21,7 +21,7 @@ public class ExchangeService {
 
     private final String API_URL = "https://api.exchangerate-api.com/v4/latest/EUR";
     private static final String URL = "https://www.xe.com/currencyconverter/convert/?Amount=1&From=EUR&To=TRY";
-    private final ChromeDriver driver;
+//    private final ChromeDriver driver;
 
     public double getEurToTryRate() {
         RestTemplate restTemplate = new RestTemplate();
