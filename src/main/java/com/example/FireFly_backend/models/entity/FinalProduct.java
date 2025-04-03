@@ -1,6 +1,7 @@
 package com.example.FireFly_backend.models.entity;
 
 import com.example.FireFly_backend.config.ApplicationContextProvider;
+import com.example.FireFly_backend.services.impl.ExchangeService;
 import com.example.FireFly_backend.services.impl.FinalProductNeedService;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -45,15 +46,23 @@ public class FinalProduct {
 
     @Transient
     private double finalCost;
+    @Transient
+    private double tryFinalCost;
+    @Transient
+    private double tryPrice;
 
 
     @PostLoad
     public void calculateFinalCost() throws ChangeSetPersister.NotFoundException {
         if (id != null) {
             FinalProductNeedService finalProductNeedService = ApplicationContextProvider.getBean(FinalProductNeedService.class);
+            ExchangeService exchangeService = ApplicationContextProvider.getBean(ExchangeService.class);
+            this.tryPrice = price * exchangeService.getEurToTryRate();
             this.finalCost = finalProductNeedService.calculateCost(id);
+            this.tryFinalCost = finalCost * exchangeService.getEurToTryRate();
         }
     }
+
 
     public String getBase64Image() {
         return Base64.getEncoder().encodeToString(this.image);

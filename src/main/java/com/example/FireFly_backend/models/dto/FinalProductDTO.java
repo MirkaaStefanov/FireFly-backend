@@ -19,7 +19,11 @@ public class FinalProductDTO {
     private double price;
     private int quantity;
     private double finalCost;
+    private double tryPrice;
+    private double tryFinalCost;
+
     @JsonIgnore
     private MultipartFile multipartFile;
+
 
 }

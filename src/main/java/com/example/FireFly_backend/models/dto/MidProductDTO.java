@@ -16,6 +16,7 @@ public class MidProductDTO {
     private String description;
     private double price;
     private int quantity;
+    private double tryPrice;
     @JsonIgnore
     private MultipartFile multipartFile;
 

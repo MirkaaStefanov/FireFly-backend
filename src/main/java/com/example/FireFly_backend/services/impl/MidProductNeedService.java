@@ -33,7 +33,7 @@ public class MidProductNeedService {
         MidProductNeed productNeed = new MidProductNeed();
 
         MidProduct midProduct = midProductRepository.findById(midProductId).orElseThrow(ChangeSetPersister.NotFoundException::new);
-        FirstProduct firstProduct = firstProductRepository.findById(midProductId).orElseThrow(ChangeSetPersister.NotFoundException::new);
+        FirstProduct firstProduct = firstProductRepository.findById(firstProductId).orElseThrow(ChangeSetPersister.NotFoundException::new);
 
         productNeed.setMidProduct(midProduct);
         productNeed.setFirstProduct(firstProduct);

@@ -1,12 +1,16 @@
 package com.example.FireFly_backend.models.entity;
 
+import com.example.FireFly_backend.config.ApplicationContextProvider;
+import com.example.FireFly_backend.services.impl.ExchangeService;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Lob;
+import jakarta.persistence.PostLoad;
 import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -36,6 +40,15 @@ public class MidProduct {
     private String description;
     private double price;
     private int quantity;
+
+    @Transient
+    private double tryPrice;
+
+    @PostLoad
+    public void calculateTryPrice() {
+        ExchangeService exchangeService = ApplicationContextProvider.getBean(ExchangeService.class);
+        this.tryPrice = price * exchangeService.getEurToTryRate();
+    }
 
     public String getBase64Image() {
         return Base64.getEncoder().encodeToString(this.image);

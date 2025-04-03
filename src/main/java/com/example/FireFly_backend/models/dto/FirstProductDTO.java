@@ -22,5 +22,6 @@ public class FirstProductDTO {
     private MaterialType materialType;
     @JsonIgnore
     private MultipartFile multipartFile;
+    private double tryPrice;
 
 }
