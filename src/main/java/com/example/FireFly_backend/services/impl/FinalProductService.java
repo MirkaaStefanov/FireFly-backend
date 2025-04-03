@@ -5,6 +5,7 @@ import com.example.FireFly_backend.models.dto.FinalProductDTO;
 import com.example.FireFly_backend.models.dto.FirstProductDTO;
 import com.example.FireFly_backend.models.entity.FinalProduct;
 import com.example.FireFly_backend.models.entity.FirstProduct;
+import com.example.FireFly_backend.models.entity.MidProduct;
 import com.example.FireFly_backend.repositories.FinalProductRepository;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -36,16 +37,15 @@ public class FinalProductService {
         return modelMapper.map(savedProduct, FinalProductDTO.class);
     }
 
-    public List<FinalProductDTO> findAll() throws ChangeSetPersister.NotFoundException{
+    public List<FinalProductDTO> findAll() throws ChangeSetPersister.NotFoundException {
         List<FinalProduct> products = finalProductRepository.findAll();
-
         Double tryExchangeRate = exchangeService.getEurToTryRate();
 
-        for(FinalProduct finalProduct : products){
+        for (FinalProduct finalProduct : products) {
             Double finalCost = finalProductNeedService.calculateCost(finalProduct.getId());
             finalProduct.setFinalCost(finalCost);
-            finalProduct.setTryPrice(finalProduct.getPrice()*tryExchangeRate);
-            finalProduct.setTryFinalCost(finalProduct.getFinalCost()*tryExchangeRate);
+            finalProduct.setTryPrice(finalProduct.getPrice() * tryExchangeRate);
+            finalProduct.setTryFinalCost(finalProduct.getFinalCost() * tryExchangeRate);
         }
         return products.stream()
                 .map(product -> modelMapper.map(product, FinalProductDTO.class))
