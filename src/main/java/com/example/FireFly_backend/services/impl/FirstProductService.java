@@ -37,10 +37,6 @@ public class FirstProductService {
 
     public List<FirstProductDTO> findAll() {
         List<FirstProduct> products = firstProductRepository.findAll();
-        Double tryExchangeRate = exchangeService.getEurToTryRate();
-        for(FirstProduct firstProduct : products){
-            firstProduct.setTryPrice(firstProduct.getPrice()*tryExchangeRate);
-        }
         return products.stream()
                 .map(product -> modelMapper.map(product, FirstProductDTO.class))
                 .collect(Collectors.toList());

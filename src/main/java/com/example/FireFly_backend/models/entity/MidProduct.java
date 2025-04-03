@@ -44,12 +44,6 @@ public class MidProduct {
     private double price;
     private int quantity;
 
-    @Transient
-    private double tryPrice;
-    @Transient
-    private double finalCost;
-    @Transient
-    private double tryFinalCost;
 
     public String getBase64Image() {
         return Base64.getEncoder().encodeToString(this.image);

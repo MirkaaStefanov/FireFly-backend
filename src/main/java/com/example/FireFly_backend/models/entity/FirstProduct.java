@@ -46,9 +46,6 @@ public class FirstProduct {
     @Enumerated(EnumType.STRING)
     private MaterialType materialType;
 
-    @Transient
-    private double tryPrice;
-
     public String getBase64Image() {
         return Base64.getEncoder().encodeToString(this.image);
     }

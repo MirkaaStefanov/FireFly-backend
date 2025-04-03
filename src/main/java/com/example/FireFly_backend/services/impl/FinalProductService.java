@@ -39,14 +39,6 @@ public class FinalProductService {
 
     public List<FinalProductDTO> findAll() throws ChangeSetPersister.NotFoundException {
         List<FinalProduct> products = finalProductRepository.findAll();
-        Double tryExchangeRate = exchangeService.getEurToTryRate();
-
-        for (FinalProduct finalProduct : products) {
-            Double finalCost = finalProductNeedService.calculateCost(finalProduct.getId());
-            finalProduct.setFinalCost(finalCost);
-            finalProduct.setTryPrice(finalProduct.getPrice() * tryExchangeRate);
-            finalProduct.setTryFinalCost(finalProduct.getFinalCost() * tryExchangeRate);
-        }
         return products.stream()
                 .map(product -> modelMapper.map(product, FinalProductDTO.class))
                 .collect(Collectors.toList());
