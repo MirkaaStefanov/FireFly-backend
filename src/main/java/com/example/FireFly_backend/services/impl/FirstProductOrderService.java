@@ -25,14 +25,8 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public class FirstProductOrderService {
 
-    private final FinalProductOrderRepository finalProductOrderRepository;
-    private final MidProductOrderRepository midProductOrderRepository;
     private final FirstProductOrderRepository firstProductOrderRepository;
-    private final FinalProductNeedRepository finalProductNeedRepository;
     private final MidProductNeedRepository midProductNeedRepository;
-    private final FinalProductRepository finalProductRepository;
-    private final MidProductRepository midProductRepository;
-    private final MidProductOrderService midProductOrderService;
     private final ModelMapper modelMapper;
 
     public List<FirstProductOrder> returnListWhenFinalProductOrdered(List<MidProductOrder> midProductOrderList, int requiredQuantity) {

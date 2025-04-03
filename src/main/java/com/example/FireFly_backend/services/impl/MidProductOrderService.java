@@ -28,12 +28,9 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public class MidProductOrderService {
 
-    private final FinalProductOrderRepository finalProductOrderRepository;
     private final MidProductOrderRepository midProductOrderRepository;
     private final FirstProductOrderRepository firstProductOrderRepository;
-    private final FinalProductNeedRepository finalProductNeedRepository;
     private final MidProductNeedRepository midProductNeedRepository;
-    private final FinalProductRepository finalProductRepository;
     private final MidProductRepository midProductRepository;
     private final FirstProductOrderService firstProductOrderService;
     private final ModelMapper modelMapper;
