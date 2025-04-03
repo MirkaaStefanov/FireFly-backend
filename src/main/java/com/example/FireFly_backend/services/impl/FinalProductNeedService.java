@@ -28,8 +28,8 @@ public class FinalProductNeedService {
     public FinalProductNeedDTO save(Long finalProductId, Long midProductId, int quantity) throws ChangeSetPersister.NotFoundException {
         FinalProductNeed productNeed = new FinalProductNeed();
 
-        FinalProduct finalProduct = finalProductRepository.findById(finalProductId).orElseThrow(ChangeSetPersister.NotFoundException::new);
-        MidProduct midProduct = midProductRepository.findById(midProductId).orElseThrow(ChangeSetPersister.NotFoundException::new);
+        FinalProduct finalProduct = finalProductRepository.findByIdAndDeletedFalse(finalProductId).orElseThrow(ChangeSetPersister.NotFoundException::new);
+        MidProduct midProduct = midProductRepository.findByIdAndDeletedFalse(midProductId).orElseThrow(ChangeSetPersister.NotFoundException::new);
 
         productNeed.setFinalProduct(finalProduct);
         productNeed.setMidProduct(midProduct);
@@ -39,9 +39,9 @@ public class FinalProductNeedService {
     }
 
     public List<FinalProductNeedDTO> findNeedsForProduct(Long productId) throws ChangeSetPersister.NotFoundException {
-        FinalProduct finalProduct = finalProductRepository.findById(productId).orElseThrow(ChangeSetPersister.NotFoundException::new);
+        FinalProduct finalProduct = finalProductRepository.findByIdAndDeletedFalse(productId).orElseThrow(ChangeSetPersister.NotFoundException::new);
 
-        List<FinalProductNeed> allForProduct = finalProductNeedRepository.findAllByFinalProduct(finalProduct);
+        List<FinalProductNeed> allForProduct = finalProductNeedRepository.findAllByFinalProductAndDeletedFalse(finalProduct);
 
         return allForProduct.stream()
                 .map(need -> modelMapper.map(need, FinalProductNeedDTO.class))
@@ -49,8 +49,8 @@ public class FinalProductNeedService {
     }
 
     public Double calculateCost(Long productId) throws ChangeSetPersister.NotFoundException {
-        FinalProduct finalProduct = finalProductRepository.findById(productId).orElseThrow(ChangeSetPersister.NotFoundException::new);
-        List<FinalProductNeed> allForProduct = finalProductNeedRepository.findAllByFinalProduct(finalProduct);
+        FinalProduct finalProduct = finalProductRepository.findByIdAndDeletedFalse(productId).orElseThrow(ChangeSetPersister.NotFoundException::new);
+        List<FinalProductNeed> allForProduct = finalProductNeedRepository.findAllByFinalProductAndDeletedFalse(finalProduct);
         Double finalPrice = (double) 0;
         for (FinalProductNeed finalProductNeed : allForProduct) {
             double priceForOneMidProduct = finalProductNeed.getMidProduct().getPrice();

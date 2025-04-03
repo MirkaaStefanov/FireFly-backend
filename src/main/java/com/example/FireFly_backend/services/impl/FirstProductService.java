@@ -36,14 +36,14 @@ public class FirstProductService {
     }
 
     public List<FirstProductDTO> findAll() {
-        List<FirstProduct> products = firstProductRepository.findAll();
+        List<FirstProduct> products = firstProductRepository.findAllByDeletedFalse();
         return products.stream()
                 .map(product -> modelMapper.map(product, FirstProductDTO.class))
                 .collect(Collectors.toList());
     }
 
     public FirstProductDTO findById(Long id) throws ChangeSetPersister.NotFoundException {
-        FirstProduct firstProduct = firstProductRepository.findById(id).orElseThrow(ChangeSetPersister.NotFoundException::new);
+        FirstProduct firstProduct = firstProductRepository.findByIdAndDeletedFalse(id).orElseThrow(ChangeSetPersister.NotFoundException::new);
         return modelMapper.map(firstProduct, FirstProductDTO.class);
     }
 

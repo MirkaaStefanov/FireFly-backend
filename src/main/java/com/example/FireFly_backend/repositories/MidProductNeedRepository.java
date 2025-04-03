@@ -7,10 +7,13 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface MidProductNeedRepository extends JpaRepository<MidProductNeed, Long> {
 
-    List<MidProductNeed> findAllByMidProduct(MidProduct midProduct);
+    List<MidProductNeed> findAllByMidProductAndDeletedFalse(MidProduct midProduct);
+    Optional<MidProductNeed> findByIdAndDeletedFalse(Long id);
+    List<MidProductNeed> findAllByDeletedFalse();
 
 }

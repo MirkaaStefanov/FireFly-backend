@@ -32,8 +32,8 @@ public class MidProductNeedService {
     public MidProductNeedDTO save(Long midProductId, Long firstProductId, int quantity) throws ChangeSetPersister.NotFoundException {
         MidProductNeed productNeed = new MidProductNeed();
 
-        MidProduct midProduct = midProductRepository.findById(midProductId).orElseThrow(ChangeSetPersister.NotFoundException::new);
-        FirstProduct firstProduct = firstProductRepository.findById(firstProductId).orElseThrow(ChangeSetPersister.NotFoundException::new);
+        MidProduct midProduct = midProductRepository.findByIdAndDeletedFalse(midProductId).orElseThrow(ChangeSetPersister.NotFoundException::new);
+        FirstProduct firstProduct = firstProductRepository.findByIdAndDeletedFalse(firstProductId).orElseThrow(ChangeSetPersister.NotFoundException::new);
 
         productNeed.setMidProduct(midProduct);
         productNeed.setFirstProduct(firstProduct);
@@ -43,9 +43,9 @@ public class MidProductNeedService {
     }
 
     public List<MidProductNeedDTO> findNeedsForProduct(Long productId) throws ChangeSetPersister.NotFoundException {
-        MidProduct midProduct = midProductRepository.findById(productId).orElseThrow(ChangeSetPersister.NotFoundException::new);
+        MidProduct midProduct = midProductRepository.findByIdAndDeletedFalse(productId).orElseThrow(ChangeSetPersister.NotFoundException::new);
 
-        List<MidProductNeed> allForProduct = midProductNeedRepository.findAllByMidProduct(midProduct);
+        List<MidProductNeed> allForProduct = midProductNeedRepository.findAllByMidProductAndDeletedFalse(midProduct);
 
         return allForProduct.stream()
                 .map(need -> modelMapper.map(need, MidProductNeedDTO.class))
@@ -53,8 +53,8 @@ public class MidProductNeedService {
     }
 
     public Double calculateCost(Long productId) throws ChangeSetPersister.NotFoundException {
-        MidProduct midProduct = midProductRepository.findById(productId).orElseThrow(ChangeSetPersister.NotFoundException::new);
-        List<MidProductNeed> allForProduct = midProductNeedRepository.findAllByMidProduct(midProduct);
+        MidProduct midProduct = midProductRepository.findByIdAndDeletedFalse(productId).orElseThrow(ChangeSetPersister.NotFoundException::new);
+        List<MidProductNeed> allForProduct = midProductNeedRepository.findAllByMidProductAndDeletedFalse(midProduct);
         Double finalPrice = (double) 0;
         for (MidProductNeed midProductNeed : allForProduct) {
             double priceForOneFirstProduct = midProductNeed.getFirstProduct().getPrice();

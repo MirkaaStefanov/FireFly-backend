@@ -39,14 +39,14 @@ public class MidProductService {
     }
 
     public List<MidProductDTO> findAll() throws ChangeSetPersister.NotFoundException {
-        List<MidProduct> products = midProductRepository.findAll();
+        List<MidProduct> products = midProductRepository.findAllByDeletedFalse();
         return products.stream()
                 .map(product -> modelMapper.map(product, MidProductDTO.class))
                 .collect(Collectors.toList());
     }
 
     public MidProductDTO findById(Long id) throws ChangeSetPersister.NotFoundException {
-        MidProduct midProduct = midProductRepository.findById(id).orElseThrow(ChangeSetPersister.NotFoundException::new);
+        MidProduct midProduct = midProductRepository.findByIdAndDeletedFalse(id).orElseThrow(ChangeSetPersister.NotFoundException::new);
         return modelMapper.map(midProduct, MidProductDTO.class);
     }
 }
