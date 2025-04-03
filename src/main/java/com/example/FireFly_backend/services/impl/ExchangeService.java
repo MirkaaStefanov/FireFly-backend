@@ -2,8 +2,10 @@ package com.example.FireFly_backend.services.impl;
 
 import lombok.AllArgsConstructor;
 import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.springframework.stereotype.Service;
@@ -11,6 +13,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.time.Duration;
 import java.util.Map;
+import java.util.NoSuchElementException;
 
 @Service
 @AllArgsConstructor
@@ -27,35 +30,38 @@ public class ExchangeService {
         return rates.get("TRY");
     }
 
-    public Double scrapeEuroToTryRate() {
-        String exchangeRate = "";
-        try {
-            System.setProperty("webdriver.chrome.driver", "http://www.google.com/");
-            driver.get(URL);
-
-            WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-            WebElement rateElement = wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("p.sc-294d8168-1")));
-
-            // Extract the main rate (e.g., 41.08)
-            String mainRate = rateElement.getText().split(" ")[0];
-
-            // Extract the decimal part if available
-            WebElement fadedDigits = rateElement.findElement(By.cssSelector("span.faded-digits"));
-            String decimalPart = fadedDigits.getText();
-
-            // Combine the full exchange rate
-            exchangeRate = mainRate + decimalPart;
-
-            System.out.println("Exchange Rate: " + exchangeRate + " TRY per EUR");
-
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            // Close the browser
-            driver.quit();
-        }
-        return Double.parseDouble(exchangeRate);
-    }
+//    public Double scrapeEuroToTryRate() {
+//        Double exchangeRate = null;
+//        ChromeOptions options = new ChromeOptions();
+//        options.addArguments("--headless");
+//
+//        WebDriver driver = new ChromeDriver(options); // Create a new instance each time
+//
+//        try {
+//            driver.get("https://www.xe.com/currencyconverter/convert/?Amount=1&From=EUR&To=TRY");
+//
+//            WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+//            WebElement rateElement = wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("p.sc-294d8168-1")));
+//
+//            String mainRate = rateElement.getText().split(" ")[0];
+//
+//            String decimalPart = "";
+//            try {
+//                WebElement fadedDigits = rateElement.findElement(By.cssSelector("span.faded-digits"));
+//                decimalPart = fadedDigits.getText();
+//            } catch (NoSuchElementException e) {
+//                System.out.println("No faded digits found.");
+//            }
+//
+//            exchangeRate = Double.parseDouble(mainRate);
+//
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        } finally {
+//            driver.quit(); // Always close the WebDriver
+//        }
+//
+//        return exchangeRate;
+//    }
 
 }

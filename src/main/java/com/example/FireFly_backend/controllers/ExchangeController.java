@@ -16,7 +16,7 @@ public class ExchangeController {
 
     @GetMapping("/try")
     public ResponseEntity<Double> exchangeEuroToTRY() {
-        return ResponseEntity.ok(exchangeService.scrapeEuroToTryRate());
+        return ResponseEntity.ok(exchangeService.getEurToTryRate());
     }
 
 }
