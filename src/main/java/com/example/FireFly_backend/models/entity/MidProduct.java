@@ -51,18 +51,6 @@ public class MidProduct {
     @Transient
     private double tryFinalCost;
 
-    @PostLoad
-    public void calculateTryPrice() throws ChangeSetPersister.NotFoundException {
-        if (this.id != null) {
-            MidProductNeedService midProductNeedService = ApplicationContextProvider.getBean(MidProductNeedService.class);
-            ExchangeService exchangeService = ApplicationContextProvider.getBean(ExchangeService.class);
-            this.tryPrice = price * exchangeService.getEurToTryRate();
-            this.finalCost = midProductNeedService.calculateCost(id);
-            this.tryFinalCost = finalCost * exchangeService.getEurToTryRate();
-        }
-    }
-
-
     public String getBase64Image() {
         return Base64.getEncoder().encodeToString(this.image);
     }

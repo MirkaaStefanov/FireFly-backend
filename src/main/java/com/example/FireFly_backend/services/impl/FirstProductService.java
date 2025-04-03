@@ -24,6 +24,7 @@ import java.util.stream.Collectors;
 public class FirstProductService {
     private final FirstProductRepository firstProductRepository;
     private final ModelMapper modelMapper;
+    private final ExchangeService exchangeService;
 
 
     public FirstProductDTO save(FirstProductDTO productDTO) throws IOException {
@@ -36,6 +37,10 @@ public class FirstProductService {
 
     public List<FirstProductDTO> findAll() {
         List<FirstProduct> products = firstProductRepository.findAll();
+        Double tryExchangeRate = exchangeService.getEurToTryRate();
+        for(FirstProduct firstProduct : products){
+            firstProduct.setTryPrice(firstProduct.getPrice()*tryExchangeRate);
+        }
         return products.stream()
                 .map(product -> modelMapper.map(product, FirstProductDTO.class))
                 .collect(Collectors.toList());

@@ -51,19 +51,6 @@ public class FinalProduct {
     @Transient
     private double tryPrice;
 
-
-    @PostLoad
-    public void calculateFinalCost() throws ChangeSetPersister.NotFoundException {
-        if (id != null) {
-            FinalProductNeedService finalProductNeedService = ApplicationContextProvider.getBean(FinalProductNeedService.class);
-            ExchangeService exchangeService = ApplicationContextProvider.getBean(ExchangeService.class);
-            this.tryPrice = price * exchangeService.getEurToTryRate();
-            this.finalCost = finalProductNeedService.calculateCost(id);
-            this.tryFinalCost = finalCost * exchangeService.getEurToTryRate();
-        }
-    }
-
-
     public String getBase64Image() {
         return Base64.getEncoder().encodeToString(this.image);
     }

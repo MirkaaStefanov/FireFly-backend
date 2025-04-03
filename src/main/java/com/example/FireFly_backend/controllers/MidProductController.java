@@ -28,7 +28,7 @@ public class MidProductController {
         return ResponseEntity.ok(midProductService.save(productDTO));
     }
     @GetMapping("/all")
-    public ResponseEntity<List<MidProductDTO>> findAll(@RequestHeader("Authorization") String auth) {
+    public ResponseEntity<List<MidProductDTO>> findAll(@RequestHeader("Authorization") String auth) throws ChangeSetPersister.NotFoundException {
         return ResponseEntity.ok(midProductService.findAll());
     }
 

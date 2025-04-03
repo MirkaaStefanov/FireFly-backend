@@ -49,12 +49,6 @@ public class FirstProduct {
     @Transient
     private double tryPrice;
 
-    @PostLoad
-    public void calculateTryPrice() {
-        ExchangeService exchangeService = ApplicationContextProvider.getBean(ExchangeService.class);
-        this.tryPrice = price * exchangeService.getEurToTryRate();
-    }
-
     public String getBase64Image() {
         return Base64.getEncoder().encodeToString(this.image);
     }

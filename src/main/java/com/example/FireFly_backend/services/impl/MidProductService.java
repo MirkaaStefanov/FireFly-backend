@@ -3,6 +3,7 @@ package com.example.FireFly_backend.services.impl;
 import com.example.FireFly_backend.models.dto.FinalProductDTO;
 import com.example.FireFly_backend.models.dto.FirstProductDTO;
 import com.example.FireFly_backend.models.dto.MidProductDTO;
+import com.example.FireFly_backend.models.entity.FinalProduct;
 import com.example.FireFly_backend.models.entity.FirstProduct;
 import com.example.FireFly_backend.models.entity.MidProduct;
 import com.example.FireFly_backend.repositories.FirstProductRepository;
@@ -25,6 +26,8 @@ public class MidProductService {
 
     private final MidProductRepository midProductRepository;
     private final ModelMapper modelMapper;
+    private final ExchangeService exchangeService;
+    private final MidProductNeedService midProductNeedService;
 
 
     public MidProductDTO save(MidProductDTO productDTO) throws IOException {
@@ -35,8 +38,16 @@ public class MidProductService {
         return modelMapper.map(savedProduct, MidProductDTO.class);
     }
 
-    public List<MidProductDTO> findAll() {
+    public List<MidProductDTO> findAll() throws ChangeSetPersister.NotFoundException {
         List<MidProduct> products = midProductRepository.findAll();
+        Double tryExchangeRate = exchangeService.getEurToTryRate();
+
+        for(MidProduct midProduct : products){
+            Double finalCost = midProductNeedService.calculateCost(midProduct.getId());
+            midProduct.setFinalCost(finalCost);
+            midProduct.setTryPrice(midProduct.getPrice()*tryExchangeRate);
+            midProduct.setTryFinalCost(midProduct.getFinalCost()*tryExchangeRate);
+        }
         return products.stream()
                 .map(product -> modelMapper.map(product, MidProductDTO.class))
                 .collect(Collectors.toList());
