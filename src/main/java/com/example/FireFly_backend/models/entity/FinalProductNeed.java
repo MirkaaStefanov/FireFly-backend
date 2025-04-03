@@ -37,5 +37,6 @@ public class FinalProductNeed {
     private MidProduct midProduct;
 
     private int quantity;
+    private boolean deleted;
 
 }

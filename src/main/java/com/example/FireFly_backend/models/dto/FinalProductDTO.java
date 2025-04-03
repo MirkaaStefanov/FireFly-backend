@@ -22,6 +22,7 @@ public class FinalProductDTO {
     private int quantity;
     @JsonIgnore
     private MultipartFile multipartFile;
+    private boolean deleted;
 
 
 }

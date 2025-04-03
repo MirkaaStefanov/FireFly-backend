@@ -43,7 +43,7 @@ public class MidProduct {
     private String description;
     private double price;
     private int quantity;
-
+    private boolean deleted;
 
     public String getBase64Image() {
         return Base64.getEncoder().encodeToString(this.image);

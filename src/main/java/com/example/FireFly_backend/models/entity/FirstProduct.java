@@ -45,6 +45,7 @@ public class FirstProduct {
     private int quantity;
     @Enumerated(EnumType.STRING)
     private MaterialType materialType;
+    private boolean deleted;
 
     public String getBase64Image() {
         return Base64.getEncoder().encodeToString(this.image);

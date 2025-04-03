@@ -20,5 +20,6 @@ public class MidProductNeedDTO {
     private MidProductDTO midProduct;
     private FirstProductDTO firstProduct;
     private int quantity;
+    private boolean deleted;
 
 }

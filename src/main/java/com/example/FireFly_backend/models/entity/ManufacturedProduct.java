@@ -36,4 +36,5 @@ public class ManufacturedProduct {
     private String barcode;
     private Date date;
     private int quantity;
+    private boolean deleted;
 }

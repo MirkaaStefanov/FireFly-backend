@@ -34,5 +34,6 @@ public class FirstProductOrder {
 
     private int quantity;
     private boolean done;
+    private boolean deleted;
 
 }
