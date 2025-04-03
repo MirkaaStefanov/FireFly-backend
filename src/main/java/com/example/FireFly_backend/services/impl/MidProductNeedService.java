@@ -52,5 +52,18 @@ public class MidProductNeedService {
                 .collect(Collectors.toList());
     }
 
+    public Double calculateCost(Long productId) throws ChangeSetPersister.NotFoundException {
+        MidProduct midProduct = midProductRepository.findById(productId).orElseThrow(ChangeSetPersister.NotFoundException::new);
+        List<MidProductNeed> allForProduct = midProductNeedRepository.findAllByMidProduct(midProduct);
+        Double finalPrice = (double) 0;
+        for (MidProductNeed midProductNeed : allForProduct) {
+            double priceForOneFirstProduct = midProductNeed.getFirstProduct().getPrice();
+            int quantity = midProductNeed.getQuantity();
+            Double costOfOneType = priceForOneFirstProduct * quantity;
+            finalPrice += costOfOneType;
+        }
+        return finalPrice;
+    }
+
 
 }
