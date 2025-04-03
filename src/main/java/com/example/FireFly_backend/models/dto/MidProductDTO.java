@@ -1,6 +1,7 @@
 package com.example.FireFly_backend.models.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.Transient;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -17,6 +18,8 @@ public class MidProductDTO {
     private double price;
     private int quantity;
     private double tryPrice;
+    private double finalCost;
+    private double tryFinalCost;
     @JsonIgnore
     private MultipartFile multipartFile;
 
