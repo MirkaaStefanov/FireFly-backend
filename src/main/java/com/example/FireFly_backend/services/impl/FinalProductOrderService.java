@@ -23,6 +23,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -41,16 +42,27 @@ public class FinalProductOrderService {
     public void createFromFinalProductOrder(Long finalProductId, int requiredQuantity) throws ChangeSetPersister.NotFoundException {
 
         FinalProduct finalProduct = finalProductRepository.findByIdAndDeletedFalse(finalProductId).orElseThrow(ChangeSetPersister.NotFoundException::new);
-        List<FinalProductNeed> finalProductNeeds = finalProductNeedRepository.findAllByFinalProductAndDeletedFalse(finalProduct);
 
-        FinalProductOrder finalProductOrder = new FinalProductOrder();
-        finalProductOrder.setFinalProduct(finalProduct);
-        finalProductOrder.setQuantity(requiredQuantity);
+
+
+        Optional<FinalProductOrder> optionalFinalProductOrder = finalProductOrderRepository.findByFinalProduct(finalProduct);
+        if(optionalFinalProductOrder.isPresent()){
+            FinalProductOrder existedFinalProduct = optionalFinalProductOrder.get();
+            existedFinalProduct.setQuantity(existedFinalProduct.getQuantity()+requiredQuantity);
+            finalProductOrderRepository.save(existedFinalProduct);
+        }else {
+            FinalProductOrder finalProductOrder = new FinalProductOrder();
+            finalProductOrder.setFinalProduct(finalProduct);
+            finalProductOrder.setQuantity(requiredQuantity);
+            finalProductOrderRepository.save(finalProductOrder);
+        }
+
+
+        List<FinalProductNeed> finalProductNeeds = finalProductNeedRepository.findAllByFinalProductAndDeletedFalse(finalProduct);
 
         List<MidProductOrder> midProductOrderList = midProductOrderService.returnListWhenFinalProductOrdered(finalProductNeeds, requiredQuantity);
         List<FirstProductOrder> firstProductOrderList = firstProductOrderService.returnListWhenFinalProductOrdered(midProductOrderList, requiredQuantity);
 
-        finalProductOrderRepository.save(finalProductOrder);
         midProductOrderRepository.saveAll(midProductOrderList);
         firstProductOrderRepository.saveAll(firstProductOrderList);
 
