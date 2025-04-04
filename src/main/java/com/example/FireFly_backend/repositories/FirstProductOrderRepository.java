@@ -1,6 +1,7 @@
 package com.example.FireFly_backend.repositories;
 
 import com.example.FireFly_backend.models.entity.FinalProduct;
+import com.example.FireFly_backend.models.entity.FirstProduct;
 import com.example.FireFly_backend.models.entity.FirstProductOrder;
 import org.springframework.data.jpa.repository.JpaRepository;
 
@@ -12,5 +13,7 @@ public interface FirstProductOrderRepository extends JpaRepository<FirstProductO
     Optional<FirstProductOrder> findByIdAndDeletedFalse(Long id);
 
     List<FirstProductOrder> findAllByDeletedFalse();
+
+    Optional<FirstProductOrder> findByFirstProduct(FirstProduct firstProduct);
 
 }
