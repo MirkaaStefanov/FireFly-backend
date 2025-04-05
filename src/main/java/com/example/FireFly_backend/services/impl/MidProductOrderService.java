@@ -22,6 +22,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -39,10 +40,18 @@ public class MidProductOrderService {
         List<MidProductOrder> midProductOrderList = new ArrayList<>();
 
         for (FinalProductNeed finalProductNeed : finalProductNeeds) {
-            MidProductOrder midProductOrder = new MidProductOrder();
-            midProductOrder.setMidProduct(finalProductNeed.getMidProduct());
-            midProductOrder.setQuantity(finalProductNeed.getQuantity() * requiredQuantity);
-            midProductOrderList.add(midProductOrder);
+            Optional<MidProductOrder> optionalMidProductOrder = midProductOrderRepository.findByMidProductAndDeletedFalse(finalProductNeed.getMidProduct());
+            if (optionalMidProductOrder.isPresent()) {
+                MidProductOrder midProductOrder = optionalMidProductOrder.get();
+                midProductOrder.setQuantity(midProductOrder.getQuantity() + finalProductNeed.getQuantity() * requiredQuantity);
+                midProductOrderRepository.save(midProductOrder);
+            } else {
+                MidProductOrder midProductOrder = new MidProductOrder();
+                midProductOrder.setMidProduct(finalProductNeed.getMidProduct());
+                midProductOrder.setQuantity(finalProductNeed.getQuantity() * requiredQuantity);
+                midProductOrderList.add(midProductOrder);
+                midProductOrderRepository.save(midProductOrder);
+            }
         }
 
         return midProductOrderList;
@@ -51,15 +60,22 @@ public class MidProductOrderService {
     public void createFromMidProductOrder(Long midProductId, int requiredQuantity) throws ChangeSetPersister.NotFoundException {
         MidProduct midProduct = midProductRepository.findByIdAndDeletedFalse(midProductId).orElseThrow(ChangeSetPersister.NotFoundException::new);
 
-        MidProductOrder midProductOrder = new MidProductOrder();
-        midProductOrder.setMidProduct(midProduct);
-        midProductOrder.setQuantity(requiredQuantity);
+        Optional<MidProductOrder> optionalMidProductOrder = midProductOrderRepository.findByMidProductAndDeletedFalse(midProduct);
+        if (optionalMidProductOrder.isPresent()) {
+            MidProductOrder midProductOrder = optionalMidProductOrder.get();
+            midProductOrder.setQuantity(midProductOrder.getQuantity() + requiredQuantity);
+            midProductOrderRepository.save(midProductOrder);
+        } else {
+            MidProductOrder midProductOrder = new MidProductOrder();
+            midProductOrder.setMidProduct(midProduct);
+            midProductOrder.setQuantity(requiredQuantity);
+            midProductOrderRepository.save(midProductOrder);
+        }
+
 
         List<MidProductNeed> midProductNeeds = midProductNeedRepository.findAllByMidProductAndDeletedFalse(midProduct);
-        List<FirstProductOrder> firstProductOrderList = firstProductOrderService.returnListWhenMidProductOrdered(midProductNeeds, requiredQuantity);
+        firstProductOrderService.returnListWhenMidProductOrdered(midProductNeeds, requiredQuantity);
 
-        midProductOrderRepository.save(midProductOrder);
-        firstProductOrderRepository.saveAll(firstProductOrderList);
     }
 
     public List<MidProductOrderDTO> allMidProductOrders() {

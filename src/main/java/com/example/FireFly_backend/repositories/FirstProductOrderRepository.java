@@ -14,6 +14,6 @@ public interface FirstProductOrderRepository extends JpaRepository<FirstProductO
 
     List<FirstProductOrder> findAllByDeletedFalse();
 
-    Optional<FirstProductOrder> findByFirstProduct(FirstProduct firstProduct);
+    Optional<FirstProductOrder> findByFirstProductAndDeletedFalse(FirstProduct firstProduct);
 
 }

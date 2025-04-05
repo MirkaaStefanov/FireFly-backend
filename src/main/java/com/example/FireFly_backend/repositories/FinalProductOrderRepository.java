@@ -14,7 +14,7 @@ public interface FinalProductOrderRepository extends JpaRepository<FinalProductO
 
     Optional<FinalProductOrder> findByIdAndDeletedFalse(Long id);
 
-    Optional<FinalProductOrder> findByFinalProduct(FinalProduct finalProduct);
+    Optional<FinalProductOrder> findByFinalProductAndDeletedFalse(FinalProduct finalProduct);
 
     List<FinalProductOrder> findAllByDeletedFalse();
 

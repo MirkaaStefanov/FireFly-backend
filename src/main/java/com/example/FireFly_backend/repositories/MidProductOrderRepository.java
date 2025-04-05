@@ -17,5 +17,5 @@ public interface MidProductOrderRepository extends JpaRepository<MidProductOrder
 
     List<MidProductOrder> findAllByDeletedFalse();
 
-    Optional<MidProductOrder> findByMidProduct(MidProduct midProduct);
+    Optional<MidProductOrder> findByMidProductAndDeletedFalse(MidProduct midProduct);
 }

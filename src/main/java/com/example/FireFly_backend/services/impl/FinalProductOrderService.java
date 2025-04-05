@@ -43,9 +43,7 @@ public class FinalProductOrderService {
 
         FinalProduct finalProduct = finalProductRepository.findByIdAndDeletedFalse(finalProductId).orElseThrow(ChangeSetPersister.NotFoundException::new);
 
-
-
-        Optional<FinalProductOrder> optionalFinalProductOrder = finalProductOrderRepository.findByFinalProduct(finalProduct);
+        Optional<FinalProductOrder> optionalFinalProductOrder = finalProductOrderRepository.findByFinalProductAndDeletedFalse(finalProduct);
         if(optionalFinalProductOrder.isPresent()){
             FinalProductOrder existedFinalProduct = optionalFinalProductOrder.get();
             existedFinalProduct.setQuantity(existedFinalProduct.getQuantity()+requiredQuantity);
@@ -61,10 +59,7 @@ public class FinalProductOrderService {
         List<FinalProductNeed> finalProductNeeds = finalProductNeedRepository.findAllByFinalProductAndDeletedFalse(finalProduct);
 
         List<MidProductOrder> midProductOrderList = midProductOrderService.returnListWhenFinalProductOrdered(finalProductNeeds, requiredQuantity);
-        List<FirstProductOrder> firstProductOrderList = firstProductOrderService.returnListWhenFinalProductOrdered(midProductOrderList, requiredQuantity);
-
-        midProductOrderRepository.saveAll(midProductOrderList);
-        firstProductOrderRepository.saveAll(firstProductOrderList);
+        firstProductOrderService.returnListWhenFinalProductOrdered(midProductOrderList, requiredQuantity);
 
     }
 
