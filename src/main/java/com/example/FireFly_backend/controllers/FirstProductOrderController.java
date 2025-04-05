@@ -1,5 +1,6 @@
 package com.example.FireFly_backend.controllers;
 
+import com.example.FireFly_backend.enums.MaterialType;
 import com.example.FireFly_backend.models.dto.FirstProductOrderDTO;
 import com.example.FireFly_backend.models.entity.FirstProductOrder;
 import com.example.FireFly_backend.services.impl.FirstProductOrderService;
@@ -32,6 +33,12 @@ public class FirstProductOrderController {
     @GetMapping("/all")
     public ResponseEntity<List<FirstProductOrderDTO>> findAllFirstProductOrders(@RequestHeader("Authorization") String auth) {
         return ResponseEntity.ok(firstProductOrderService.allFirstProductOrders());
+    }
+
+
+    @GetMapping("/allByMaterialType")
+    public ResponseEntity<List<FirstProductOrderDTO>> findAllFirstProductOrders(@RequestParam MaterialType materialType, @RequestHeader("Authorization") String auth) {
+        return ResponseEntity.ok(firstProductOrderService.allFirstProductOrdersByType(materialType));
     }
 
 }

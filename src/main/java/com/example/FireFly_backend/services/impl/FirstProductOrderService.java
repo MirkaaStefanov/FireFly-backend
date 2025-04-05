@@ -1,5 +1,6 @@
 package com.example.FireFly_backend.services.impl;
 
+import com.example.FireFly_backend.enums.MaterialType;
 import com.example.FireFly_backend.models.dto.FinalProductOrderDTO;
 import com.example.FireFly_backend.models.dto.FirstProductOrderDTO;
 import com.example.FireFly_backend.models.entity.FinalProductOrder;
@@ -100,5 +101,12 @@ public class FirstProductOrderService {
         }
     }
 
+    public List<FirstProductOrderDTO> allFirstProductOrdersByType(MaterialType materialType){
+        List<FirstProductOrder> firstProductOrderList = firstProductOrderRepository.findAllByDeletedFalseAndFirstProductMaterialType(materialType);
+
+        return firstProductOrderList.stream()
+                .map(product -> modelMapper.map(product, FirstProductOrderDTO.class))
+                .collect(Collectors.toList());
+    }
 
 }
