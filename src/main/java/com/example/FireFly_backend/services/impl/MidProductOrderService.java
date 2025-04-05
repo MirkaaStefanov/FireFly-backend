@@ -36,14 +36,20 @@ public class MidProductOrderService {
     private final FirstProductOrderService firstProductOrderService;
     private final ModelMapper modelMapper;
 
-    public List<MidProductOrder> returnListWhenFinalProductOrdered(List<FinalProductNeed> finalProductNeeds, int requiredQuantity) {
+    public void returnListWhenFinalProductOrdered(List<FinalProductNeed> finalProductNeeds, int requiredQuantity) {
         List<MidProductOrder> midProductOrderList = new ArrayList<>();
 
         for (FinalProductNeed finalProductNeed : finalProductNeeds) {
             Optional<MidProductOrder> optionalMidProductOrder = midProductOrderRepository.findByMidProductAndDeletedFalse(finalProductNeed.getMidProduct());
             if (optionalMidProductOrder.isPresent()) {
+                MidProductOrder newMidProducts = new MidProductOrder();
                 MidProductOrder midProductOrder = optionalMidProductOrder.get();
                 midProductOrder.setQuantity(midProductOrder.getQuantity() + finalProductNeed.getQuantity() * requiredQuantity);
+
+                newMidProducts.setQuantity(finalProductNeed.getQuantity() * requiredQuantity);
+                newMidProducts.setMidProduct(finalProductNeed.getMidProduct());
+                midProductOrderList.add(newMidProducts);
+
                 midProductOrderRepository.save(midProductOrder);
             } else {
                 MidProductOrder midProductOrder = new MidProductOrder();
@@ -54,7 +60,7 @@ public class MidProductOrderService {
             }
         }
 
-        return midProductOrderList;
+        firstProductOrderService.returnListWhenFinalProductOrdered(midProductOrderList, requiredQuantity);
     }
 
     public void createFromMidProductOrder(Long midProductId, int requiredQuantity) throws ChangeSetPersister.NotFoundException {

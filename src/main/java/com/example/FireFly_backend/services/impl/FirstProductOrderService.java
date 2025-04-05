@@ -35,9 +35,7 @@ public class FirstProductOrderService {
     private final FirstProductRepository firstProductRepository;
     private final ModelMapper modelMapper;
 
-    public List<FirstProductOrder> returnListWhenFinalProductOrdered(List<MidProductOrder> midProductOrderList, int requiredQuantity) {
-
-        List<FirstProductOrder> firstProductOrderList = new ArrayList<>();
+    public void returnListWhenFinalProductOrdered(List<MidProductOrder> midProductOrderList, int requiredQuantity) {
 
         for (MidProductOrder midProductOrder : midProductOrderList) {
             List<MidProductNeed> midProductNeeds = midProductNeedRepository.findAllByMidProductAndDeletedFalse(midProductOrder.getMidProduct());
@@ -45,21 +43,20 @@ public class FirstProductOrderService {
                 Optional<FirstProductOrder> optionalFirstProductOrder = firstProductOrderRepository.findByFirstProductAndDeletedFalse(midProductNeed.getFirstProduct());
                 if (optionalFirstProductOrder.isPresent()) {
                     FirstProductOrder firstProductOrder = optionalFirstProductOrder.get();
-                    firstProductOrder.setQuantity(firstProductOrder.getQuantity() + midProductOrder.getQuantity() * midProductNeed.getQuantity() * requiredQuantity);
+                    firstProductOrder.setQuantity(firstProductOrder.getQuantity() + midProductOrder.getQuantity() * midProductNeed.getQuantity());
                     firstProductOrderRepository.save(firstProductOrder);
                 } else {
                     FirstProductOrder firstProductOrder = new FirstProductOrder();
                     firstProductOrder.setFirstProduct(midProductNeed.getFirstProduct());
-                    firstProductOrder.setQuantity(midProductOrder.getQuantity() * midProductNeed.getQuantity() * requiredQuantity);
-                    firstProductOrderList.add(firstProductOrder);
+                    firstProductOrder.setQuantity(midProductOrder.getQuantity() * midProductNeed.getQuantity());
                     firstProductOrderRepository.save(firstProductOrder);
                 }
             }
         }
-        return firstProductOrderList;
+
     }
 
-    public List<FirstProductOrder> returnListWhenMidProductOrdered(List<MidProductNeed> midProductNeeds, int requiredQuantity) {
+    public void returnListWhenMidProductOrdered(List<MidProductNeed> midProductNeeds, int requiredQuantity) {
         List<FirstProductOrder> firstProductOrderList = new ArrayList<>();
 
         for (MidProductNeed midProductNeed : midProductNeeds) {
@@ -68,15 +65,15 @@ public class FirstProductOrderService {
                 FirstProductOrder firstProductOrder = optionalFirstProductOrder.get();
                 firstProductOrder.setQuantity(firstProductOrder.getQuantity() + midProductNeed.getQuantity() * requiredQuantity);
                 firstProductOrderRepository.save(firstProductOrder);
+            }else{
+                FirstProductOrder firstProductOrder = new FirstProductOrder();
+                firstProductOrder.setFirstProduct(midProductNeed.getFirstProduct());
+                firstProductOrder.setQuantity(midProductNeed.getQuantity() * requiredQuantity);
+                firstProductOrderList.add(firstProductOrder);
+                firstProductOrderRepository.save(firstProductOrder);
             }
-            FirstProductOrder firstProductOrder = new FirstProductOrder();
-            firstProductOrder.setFirstProduct(midProductNeed.getFirstProduct());
-            firstProductOrder.setQuantity(midProductNeed.getQuantity() * requiredQuantity);
-            firstProductOrderList.add(firstProductOrder);
-            firstProductOrderRepository.save(firstProductOrder);
         }
 
-        return firstProductOrderList;
     }
 
     public List<FirstProductOrderDTO> allFirstProductOrders() {

@@ -57,9 +57,7 @@ public class FinalProductOrderService {
 
 
         List<FinalProductNeed> finalProductNeeds = finalProductNeedRepository.findAllByFinalProductAndDeletedFalse(finalProduct);
-
-        List<MidProductOrder> midProductOrderList = midProductOrderService.returnListWhenFinalProductOrdered(finalProductNeeds, requiredQuantity);
-        firstProductOrderService.returnListWhenFinalProductOrdered(midProductOrderList, requiredQuantity);
+        midProductOrderService.returnListWhenFinalProductOrdered(finalProductNeeds, requiredQuantity);
 
     }
 
