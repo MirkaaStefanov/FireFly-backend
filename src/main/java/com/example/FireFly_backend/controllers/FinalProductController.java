@@ -10,6 +10,7 @@ import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,7 +27,7 @@ public class FinalProductController {
     private final FinalProductService finalProductService;
 
     @PostMapping("/save")
-    public ResponseEntity<FinalProductDTO> save(@RequestBody FinalProductDTO productDTO,@RequestHeader("Authorization") String auth) throws IOException {
+    public ResponseEntity<FinalProductDTO> save(@RequestBody FinalProductDTO productDTO, @RequestHeader("Authorization") String auth) throws IOException {
         return ResponseEntity.ok(finalProductService.save(productDTO));
     }
 
@@ -36,8 +37,13 @@ public class FinalProductController {
     }
 
     @GetMapping("/findById/{id}")
-    public ResponseEntity<FinalProductDTO> findById(@RequestParam Long id,@RequestHeader("Authorization") String auth) throws ChangeSetPersister.NotFoundException {
+    public ResponseEntity<FinalProductDTO> findById(@RequestParam Long id, @RequestHeader("Authorization") String auth) throws ChangeSetPersister.NotFoundException {
         return ResponseEntity.ok(finalProductService.findById(id));
+    }
+
+    @PutMapping("/edit/{id}")
+    public ResponseEntity<FinalProductDTO> update(@RequestParam Long id, @RequestBody FinalProductDTO finalProductDTO, @RequestHeader("Authorization") String auth) throws ChangeSetPersister.NotFoundException {
+        return ResponseEntity.ok(finalProductService.update(id, finalProductDTO));
     }
 
 }

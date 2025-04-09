@@ -49,4 +49,12 @@ public class FinalProductService {
         return modelMapper.map(finalProduct, FinalProductDTO.class);
     }
 
+    public FinalProductDTO update(Long id, FinalProductDTO finalProductDTO) {
+        FinalProduct finalProduct = modelMapper.map(finalProductDTO, FinalProduct.class);
+        byte[] decodedImage = Base64.getDecoder().decode(finalProductDTO.getImage());
+        finalProduct.setImage(decodedImage);
+        finalProduct.setId(id);
+        return modelMapper.map(finalProductRepository.save(finalProduct), FinalProductDTO.class);
+    }
+
 }
