@@ -8,6 +8,7 @@ import com.example.FireFly_backend.services.impl.FinalProductService;
 import lombok.AllArgsConstructor;
 import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -46,4 +47,9 @@ public class FinalProductController {
         return ResponseEntity.ok(finalProductService.update(id, finalProductDTO));
     }
 
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<String> delete(@RequestParam Long id, @RequestHeader("Authorization") String auth) throws ChangeSetPersister.NotFoundException {
+        finalProductService.delete(id);
+        return ResponseEntity.ok("Product have been deleted successfully");
+    }
 }

@@ -57,4 +57,10 @@ public class FinalProductService {
         return modelMapper.map(finalProductRepository.save(finalProduct), FinalProductDTO.class);
     }
 
+    public void delete(Long id) throws ChangeSetPersister.NotFoundException {
+        FinalProduct finalProduct = finalProductRepository.findByIdAndDeletedFalse(id).orElseThrow(ChangeSetPersister.NotFoundException::new);
+        finalProduct.setDeleted(true);
+        finalProductRepository.save(finalProduct);
+    }
+
 }
