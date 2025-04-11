@@ -49,4 +49,19 @@ public class MidProductService {
         MidProduct midProduct = midProductRepository.findByIdAndDeletedFalse(id).orElseThrow(ChangeSetPersister.NotFoundException::new);
         return modelMapper.map(midProduct, MidProductDTO.class);
     }
+
+    public MidProductDTO update(Long id, MidProductDTO midProductDTO) {
+        MidProduct midProduct = modelMapper.map(midProductDTO, MidProduct.class);
+        byte[] decodedImage = Base64.getDecoder().decode(midProductDTO.getImage());
+        midProduct.setImage(decodedImage);
+        midProduct.setId(id);
+        return modelMapper.map(midProductRepository.save(midProduct), MidProductDTO.class);
+    }
+
+    public void delete(Long id) throws ChangeSetPersister.NotFoundException {
+        MidProduct midProduct = midProductRepository.findByIdAndDeletedFalse(id).orElseThrow(ChangeSetPersister.NotFoundException::new);
+        midProduct.setDeleted(true);
+        midProductRepository.save(midProduct);
+    }
+
 }

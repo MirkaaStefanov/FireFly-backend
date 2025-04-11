@@ -10,6 +10,7 @@ import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -43,12 +44,12 @@ public class FinalProductController {
     }
 
     @PutMapping("/edit/{id}")
-    public ResponseEntity<FinalProductDTO> update(@RequestParam Long id, @RequestBody FinalProductDTO finalProductDTO, @RequestHeader("Authorization") String auth) throws ChangeSetPersister.NotFoundException {
+    public ResponseEntity<FinalProductDTO> update(@PathVariable Long id, @RequestBody FinalProductDTO finalProductDTO, @RequestHeader("Authorization") String auth) throws ChangeSetPersister.NotFoundException {
         return ResponseEntity.ok(finalProductService.update(id, finalProductDTO));
     }
 
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<String> delete(@RequestParam Long id, @RequestHeader("Authorization") String auth) throws ChangeSetPersister.NotFoundException {
+    public ResponseEntity<String> delete(@PathVariable Long id, @RequestHeader("Authorization") String auth) throws ChangeSetPersister.NotFoundException {
         finalProductService.delete(id);
         return ResponseEntity.ok("Product have been deleted successfully");
     }

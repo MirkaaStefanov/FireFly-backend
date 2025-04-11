@@ -2,8 +2,10 @@ package com.example.FireFly_backend.services.impl;
 
 import com.example.FireFly_backend.models.dto.FinalProductDTO;
 import com.example.FireFly_backend.models.dto.FirstProductDTO;
+import com.example.FireFly_backend.models.dto.MidProductDTO;
 import com.example.FireFly_backend.models.entity.FinalProduct;
 import com.example.FireFly_backend.models.entity.FirstProduct;
+import com.example.FireFly_backend.models.entity.MidProduct;
 import com.example.FireFly_backend.repositories.FirstProductRepository;
 import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
@@ -45,6 +47,20 @@ public class FirstProductService {
     public FirstProductDTO findById(Long id) throws ChangeSetPersister.NotFoundException {
         FirstProduct firstProduct = firstProductRepository.findByIdAndDeletedFalse(id).orElseThrow(ChangeSetPersister.NotFoundException::new);
         return modelMapper.map(firstProduct, FirstProductDTO.class);
+    }
+
+    public FirstProductDTO update(Long id, FirstProductDTO firstProductDTO) {
+        FirstProduct firstProduct = modelMapper.map(firstProductDTO, FirstProduct.class);
+        byte[] decodedImage = Base64.getDecoder().decode(firstProductDTO.getImage());
+        firstProduct.setImage(decodedImage);
+        firstProduct.setId(id);
+        return modelMapper.map(firstProductRepository.save(firstProduct), FirstProductDTO.class);
+    }
+
+    public void delete(Long id) throws ChangeSetPersister.NotFoundException {
+        FirstProduct firstProduct = firstProductRepository.findByIdAndDeletedFalse(id).orElseThrow(ChangeSetPersister.NotFoundException::new);
+        firstProduct.setDeleted(true);
+        firstProductRepository.save(firstProduct);
     }
 
 }
