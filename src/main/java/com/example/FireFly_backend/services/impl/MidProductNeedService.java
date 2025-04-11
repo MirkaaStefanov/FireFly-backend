@@ -1,6 +1,7 @@
 package com.example.FireFly_backend.services.impl;
 
 import com.example.FireFly_backend.models.dto.FinalProductNeedDTO;
+import com.example.FireFly_backend.models.dto.MidProductDTO;
 import com.example.FireFly_backend.models.dto.MidProductNeedDTO;
 import com.example.FireFly_backend.models.entity.FinalProduct;
 import com.example.FireFly_backend.models.entity.FinalProductNeed;
@@ -50,6 +51,23 @@ public class MidProductNeedService {
         return allForProduct.stream()
                 .map(need -> modelMapper.map(need, MidProductNeedDTO.class))
                 .collect(Collectors.toList());
+    }
+
+    public MidProductNeedDTO findById(Long finalProductNeedId) throws ChangeSetPersister.NotFoundException {
+        MidProductNeed midProductNeed = midProductNeedRepository.findByIdAndDeletedFalse(finalProductNeedId).orElseThrow(ChangeSetPersister.NotFoundException::new);
+        return modelMapper.map(midProductNeed, MidProductNeedDTO.class);
+    }
+
+    public MidProductNeedDTO update(Long midNeedId, MidProductNeedDTO midProductNeedDTO) throws ChangeSetPersister.NotFoundException {
+        MidProductNeed midProductNeed = midProductNeedRepository.findByIdAndDeletedFalse(midNeedId).orElseThrow(ChangeSetPersister.NotFoundException::new);
+        midProductNeed.setQuantity(midProductNeedDTO.getQuantity());
+        return modelMapper.map(midProductNeedRepository.save(midProductNeed), MidProductNeedDTO.class);
+    }
+
+    public void delete(Long midProductNeedId) throws ChangeSetPersister.NotFoundException {
+        MidProductNeed midProductNeed = midProductNeedRepository.findByIdAndDeletedFalse(midProductNeedId).orElseThrow(ChangeSetPersister.NotFoundException::new);
+        midProductNeed.setDeleted(true);
+        midProductNeedRepository.save(midProductNeed);
     }
 
     public Double calculateCost(Long productId) throws ChangeSetPersister.NotFoundException {

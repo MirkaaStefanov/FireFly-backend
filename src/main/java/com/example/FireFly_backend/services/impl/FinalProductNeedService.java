@@ -48,6 +48,23 @@ public class FinalProductNeedService {
                 .collect(Collectors.toList());
     }
 
+    public FinalProductNeedDTO findById(Long finalProductNeedId) throws ChangeSetPersister.NotFoundException {
+        FinalProductNeed finalProductNeed = finalProductNeedRepository.findByIdAndDeletedFalse(finalProductNeedId).orElseThrow(ChangeSetPersister.NotFoundException::new);
+        return modelMapper.map(finalProductNeed, FinalProductNeedDTO.class);
+    }
+
+    public FinalProductNeedDTO update(Long finalProductNeedId, FinalProductNeedDTO finalProductNeedDTO) throws ChangeSetPersister.NotFoundException {
+        FinalProductNeed finalProductNeed = finalProductNeedRepository.findByIdAndDeletedFalse(finalProductNeedId).orElseThrow(ChangeSetPersister.NotFoundException::new);
+        finalProductNeed.setQuantity(finalProductNeedDTO.getQuantity());
+        return modelMapper.map(finalProductNeedRepository.save(finalProductNeed), FinalProductNeedDTO.class);
+    }
+
+    public void delete(Long finalProductNeedId) throws ChangeSetPersister.NotFoundException {
+        FinalProductNeed finalProductNeed = finalProductNeedRepository.findByIdAndDeletedFalse(finalProductNeedId).orElseThrow(ChangeSetPersister.NotFoundException::new);
+        finalProductNeed.setDeleted(true);
+        finalProductNeedRepository.save(finalProductNeed);
+    }
+
     public Double calculateCost(Long productId) throws ChangeSetPersister.NotFoundException {
         FinalProduct finalProduct = finalProductRepository.findByIdAndDeletedFalse(productId).orElseThrow(ChangeSetPersister.NotFoundException::new);
         List<FinalProductNeed> allForProduct = finalProductNeedRepository.findAllByFinalProductAndDeletedFalse(finalProduct);
